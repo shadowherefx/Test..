@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHADOW • PUBG SENSI</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Consolas,monospace;
+  color:#00ff66;
+  overflow-x:hidden;
+  background:url('background.png') no-repeat center center fixed;
+  background-size:cover;
+}
+
+/* ================= INTRO ================= */
+#intro{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.95);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+#intro video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* SKIP BUTTON */
+#skipIntro{
+  position:absolute;
+  bottom:30px;
+  right:30px;
+  padding:10px 18px;
+  border-radius:25px;
+  font-size:14px;
+  color:#00ff66;
+  background:rgba(0,0,0,0.5);
+  border:1px solid rgba(0,255,102,.6);
+  backdrop-filter:blur(6px);
+  cursor:pointer;
+  box-shadow:0 0 15px rgba(0,255,102,.6);
+  transition:.3s;
+}
+#skipIntro:hover{
+  transform:scale(1.08);
+  box-shadow:0 0 25px rgba(0,255,102,.9);
+}
+
+/* ================= LOGO ================= */
+#logo{
+  display:block;
+  width:100%;
+  max-height:150px;
+  object-fit:contain;
+}
+
+/* ================= HEADER ================= */
+header{
+  text-align:center;
+  font-size:26px;
+  padding:10px 0;
+}
+
+/* ================= TOP ================= */
+.top-controls{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:15px;
+}
+
+input{
+  padding:12px;
+  width:240px;
+  background:rgba(0,0,0,0.5);
+  border-radius:10px;
+  color:#00ff66;
+  border:1px solid rgba(0,255,102,.4);
+}
+
+button{
+  padding:10px 14px;
+  background:rgba(0,0,0,0.5);
+  border-radius:10px;
+  color:#00ff66;
+  border:1px solid rgba(0,255,102,.4);
+  cursor:pointer;
+  transition:.3s;
+}
+button:hover{transform:scale(1.05)}
+
+/* ================= CARDS ================= */
+.container{
+  padding:15px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:15px;
+}
+
+.card{
+  background:rgba(0,0,0,0.25);
+  padding:15px;
+  border-radius:15px;
+  border:2px solid;
+  border-image:linear-gradient(45deg,#00ff66,#00ffff,#ff00ff,#ff66ff) 1;
+  box-shadow:0 0 20px rgba(0,255,102,.6);
+  transition:.4s;
+}
+.card:hover{
+  box-shadow:0 0 25px 5px rgba(0,255,102,.8);
+  transform:translateY(-2px);
+}
+
+.card h3{margin:0 0 8px;font-size:16px}
+.val{font-size:14px;line-height:1.6}
+
+/* ================= COPY POPUP ================= */
+#copyPopup{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.25);
+  z-index:999;
+}
+
+.popupBox{
+  background:rgba(5,5,5,.85);
+  padding:25px;
+  border-radius:15px;
+  text-align:center;
+  width:90%;
+  max-width:360px;
+}
+.typing{min-height:40px;margin-bottom:15px}
+
+/* ================= AI PAGE ================= */
+#aiPage{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.25);
+  z-index:1000;
+}
+.aiBox{
+  background:rgba(5,5,5,.85);
+  padding:25px;
+  border-radius:15px;
+  text-align:center;
+  width:90%;
+  max-width:360px;
+}
+.aiBox:hover{
+  box-shadow:0 0 25px 5px rgba(0,255,102,.8);
+}
+.aiBox input{
+  margin-bottom:10px;
+  width:80%;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid rgba(0,255,102,.4);
+  background:rgba(0,0,0,.5);
+  color:#00ff66;
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div id="intro">
+  <video id="introVideo" autoplay muted playsinline>
+    <source src="intro.mp4" type="video/mp4">
+  </video>
+  <button id="skipIntro">Skip</button>
+</div>
+
+<img id="logo" src="logo.png">
+<header>SHADOW • PUBG SENSI</header>
+
+<div class="top-controls">
+  <input id="search" placeholder="Search mobile model...">
+  <button onclick="openAI()">Generate with AI</button>
+</div>
+
+<div class="container" id="cards"></div>
+
+<!-- COPY POPUP -->
+<div id="copyPopup">
+  <div class="popupBox">
+    <div class="typing" id="typingText"></div>
+    <button onclick="closePopup()">Cancel</button>
+    <button onclick="contactMe()">Contact</button>
+  </div>
+</div>
+
+<!-- AI PAGE -->
+<div id="aiPage">
+  <div class="aiBox">
+    <h3>AI PUBG SENSI GENERATOR</h3><br>
+    <input id="aiModel" placeholder="Mobile Model">
+    <input id="aiRam" placeholder="RAM (GB)">
+    <input id="aiStore" placeholder="Storage (GB)">
+    <button onclick="genAI()">Generate</button>
+    <button onclick="closeAI()">Close</button>
+    <div id="aiResult"></div>
+  </div>
+</div>
+
+<script>
+/* INTRO LOGIC */
+const intro=document.getElementById("intro");
+const introVideo=document.getElementById("introVideo");
+const skip=document.getElementById("skipIntro");
+
+function endIntro(){
+  intro.style.display="none";
+  localStorage.setItem("introShown","true");
+}
+
+if(localStorage.getItem("introShown")){
+  intro.style.display="none";
+}else{
+  introVideo.onended=endIntro;
+  skip.onclick=endIntro;
+}
+
+/* PUBG SENSI */
+function sensi(r=4,s=64){
+  let b=130-r*2+s/10;
+  return`Camera Free Look:${b}%<br>Camera TPP:${b-5}%<br>Camera FPP:${b-8}%<br>Red Dot:${b-12}%<br>3x:${b-18}%<br>6x:${b-28}%<br>8x:${b-35}%`
+}
+
+const series=[
+["Infinix Note",1,30],["Infinix Hot",1,40],["Tecno Spark",1,40],
+["Samsung A",10,55],["Realme C",10,55],["Redmi Note",5,30]
+];
+
+const cards=document.getElementById("cards");
+series.forEach(s=>{
+for(let i=s[1];i<=s[2];i++){
+let d=document.createElement("div");
+d.className="card";
+d.dataset.name=(s[0]+i).toLowerCase();
+d.innerHTML=`<h3>${s[0]} ${i}</h3><div class="val">${sensi()}</div><button onclick="copyS(this)">Copy</button>`;
+cards.appendChild(d);
+}});
+
+search.oninput=()=>{let v=search.value.toLowerCase();
+document.querySelectorAll(".card").forEach(c=>c.style.display=c.dataset.name.includes(v)?"block":"none");}
+
+function copyS(b){
+navigator.clipboard.writeText(b.parentElement.querySelector(".val").innerText);
+showPopup();
+}
+
+function showPopup(){
+copyPopup.style.display="flex";
+let t="You want to make your own web so contact me",i=0;
+typingText.innerHTML="";
+let x=setInterval(()=>{typingText.innerHTML+=t[i++];if(i>=t.length)clearInterval(x)},40);
+}
+function closePopup(){copyPopup.style.display="none";}
+function contactMe(){window.open("https://wa.me/923476668273","_blank");}
+
+function openAI(){aiPage.style.display="flex";}
+function closeAI(){aiPage.style.display="none";}
+
+function genAI(){
+let m=aiModel.value.trim(),r=parseInt(aiRam.value),s=parseInt(aiStore.value);
+if(!m||!r||!s)return alert("Fill all fields");
+let b=130-r*2+s/10+m.length%5;
+aiResult.innerHTML=`<div class="card"><h3>${m} AI PUBG Sensi</h3><div class="val">
+Camera Free Look:${Math.round(b)}%<br>Camera TPP:${b-5}%<br>Camera FPP:${b-8}%<br>Red Dot:${b-12}%</div>
+<button onclick="copyS(this)">Copy</button></div>`;
+}
+</script>
+
+</body>
+</html>
